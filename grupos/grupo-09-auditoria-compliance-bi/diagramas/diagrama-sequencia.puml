@@ -1,1 +1,21 @@
+@startuml
+actor "Módulo G01-G08" as Modulo
+participant "API G09" as API
+participant "ServicoAuditoria" as SA
+database "BancoImutavel" as DB
+participant "ServicoConformidade" as SC
+participant "ServicoAlertas" as AL
 
+Modulo -> API: POST /eventos (dados, modulo, usuario)
+API -> SA: registrarEvento(eventoDTO)
+SA -> SA: validar formato e integridade
+SA -> DB: insert evento_auditoria
+DB --> SA: id
+SA -> SC: verificarLei14133(evento)
+SC --> SA: lista de conformidade
+SA -> DB: insert itens_conformidade
+SA -> AL: avaliarAlertas(evento)
+AL --> SA: alertas gerados (se houver)
+SA --> API: 201 Created (id, alertas)
+API --> Modulo: resposta
+@enduml
