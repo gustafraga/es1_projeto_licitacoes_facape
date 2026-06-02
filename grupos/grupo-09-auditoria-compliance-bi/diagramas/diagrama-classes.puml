@@ -1,1 +1,52 @@
+@startuml
+class EventoAuditoria {
+  + UUID id
+  + DateTime timestamp
+  + String moduloOrigem
+  + String tipoEvento
+  + String usuario
+  + String dadosEvento
+  + String resultado
+  + Boolean conforme
+  + criar()
+  + validarConformidade()
+}
 
+class ConformidadeItem {
+  + UUID id
+  + String regraLei14133
+  + Boolean atendido
+  + String mensagemViolacao
+  + UUID idEventoAuditoria
+}
+
+class Indicador {
+  + Date dataReferencia
+  + String nome
+  + Double valor
+  + String unidade
+  + calcular()
+}
+
+class Alerta {
+  + UUID id
+  + DateTime dataHora
+  + String tipo
+  + String gravidade
+  + String mensagem
+  + Boolean resolvido
+  + disparar()
+}
+
+class AcessoAuditoria {
+  + UUID id
+  + String usuario
+  + DateTime timestamp
+  + String filtrosConsulta
+  + String ipOrigem
+}
+
+EventoAuditoria "1" -- "*" ConformidadeItem
+EventoAuditoria "1" -- "0..1" Alerta : gera
+AcessoAuditoria -- "0..*" EventoAuditoria : consulta
+@enduml
