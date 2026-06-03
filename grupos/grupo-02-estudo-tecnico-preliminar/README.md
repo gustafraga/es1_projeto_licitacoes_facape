@@ -26,8 +26,8 @@ Análise técnica do DFD: cotação de preços (via Banco de Preços), especific
 | BPMN | Fluxo de análise técnica com pontos de validação | ✅ Concluído |
 | Backlog | Mínimo 5 histórias de usuário | ⏳ Pendente |
 | ADRs (mínimo 2) | Ex.: API vs. manual para Banco de Preços | ⏳ Pendente |
-| Testes | Validação de cotações, detecção de outliers de preço | ⏳ Pendente |
-| Auditoria | Quem fez cada cotação, critério de seleção | ⏳ Pendente |
+| Testes | Validação de cotações, detecção de outliers de preço | ✅ Concluído |
+| Auditoria | Quem fez cada cotação, critério de seleção | ✅ Concluído |
 
 ---
 
