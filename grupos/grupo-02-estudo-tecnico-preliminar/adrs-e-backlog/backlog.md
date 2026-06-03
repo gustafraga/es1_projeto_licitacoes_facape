@@ -1,4 +1,4 @@
-# 📋 Backlog — Sistema de Licitação
+#  Backlog — Sistema de Licitação
 
 > **Módulo:** Cotação e Banco de Preços  
 > **Responsável:** Pedro Ribeiro  
@@ -18,11 +18,11 @@
 
 ---
 
-## 📖 Histórias de Usuário
+## Histórias de Usuário
 
 ---
 
-### US01 — 🔍 Consultar Banco de Preços
+### US01 — Consultar Banco de Preços
 
 > **Como** analista de licitação, **quero** consultar o banco de preços automaticamente, **para** obter referências de valores de mercado sem precisar fazer pesquisa manual.
 
@@ -39,7 +39,7 @@
 
 ---
 
-### US02 — 📝 Registrar Cotação de Fornecedor
+### US02 — Registrar Cotação de Fornecedor
 
 > **Como** analista de licitação, **quero** registrar a cotação recebida de um fornecedor, **para** comparar propostas e embasar a escolha da melhor oferta.
 
@@ -90,7 +90,7 @@
 
 ---
 
-### US05 — 📄 Gerar Estudo Técnico Preliminar (ETP)
+### US05 — Gerar Estudo Técnico Preliminar (ETP)
 
 > **Como** analista de licitação, **quero** gerar o Estudo Técnico Preliminar a partir dos dados de especificação e cotação já registrados, **para** não precisar preencher o documento manualmente.
 
