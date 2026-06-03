@@ -22,8 +22,8 @@ Análise técnica do DFD: cotação de preços (via Banco de Preços), especific
 |----------|-----------|--------|
 | Casos de uso (mínimo 4) | Consultar Banco de Preços, fazer cotação, validar especificação, gerar ETP | ✅ Concluído |
 | Diagrama UML de classes | `Cotacao`, `Fornecedor`, `Especificacao`, `AnaliseETP` | ✅ Concluído |
-| Diagrama de sequência | Integração com Banco de Preços, análise de propostas | ⏳ Pendente |
-| BPMN | Fluxo de análise técnica com pontos de validação | ⏳ Pendente |
+| Diagrama de sequência | Integração com Banco de Preços, análise de propostas | ✅ Concluído |
+| BPMN | Fluxo de análise técnica com pontos de validação | ✅ Concluído |
 | Backlog | Mínimo 5 histórias de usuário | ⏳ Pendente |
 | ADRs (mínimo 2) | Ex.: API vs. manual para Banco de Preços | ⏳ Pendente |
 | Testes | Validação de cotações, detecção de outliers de preço | ⏳ Pendente |
