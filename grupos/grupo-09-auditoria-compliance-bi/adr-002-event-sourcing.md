@@ -1,21 +1,27 @@
-# ADR-002: Uso de Event Sourcing vs. Log simples
+# ADR-002: Avaliação do uso de Event Sourcing e modelo de logs
 
 ## Contexto
-O sistema precisa registrar todas as mudanças de estado dos processos licitatórios para auditoria. Existe a possibilidade de implementar um padrão de Event Sourcing completo, onde o estado atual seria reconstruído a partir dos eventos.
+
+O sistema necessita armazenar o histórico completo das alterações realizadas nos processos licitatórios, permitindo rastreamento e auditoria das operações. Foi analisada a possibilidade de utilizar o padrão **Event Sourcing**, no qual o estado atual do sistema seria obtido através da reprodução dos eventos registrados.
 
 ## Decisão
-**Não adotar Event Sourcing completo.** Optamos por um modelo de **log append-only** simples (tabela de eventos) sem reconstrução de estado agregado.
+
+Foi decidido **não utilizar o padrão Event Sourcing completo**. A solução adotada será baseada em um modelo de **logs imutáveis em formato append-only**, utilizando uma tabela de eventos responsável apenas pelo armazenamento histórico das alterações, sem realizar reconstrução de estados agregados.
 
 ## Justificativa
-- Não há necessidade de "replay" de eventos para recriar o estado de negócio – cada módulo já mantém seu próprio estado atual.
-- A auditoria exige apenas o registro histórico imutável, não a derivação de estado por eventos.
-- Menor complexidade de implementação e manutenção.
-- O banco relacional com tabela de eventos atende todos os requisitos de consulta.
 
-## Alternativas rejeitadas
-- **Event Sourcing completo (ex.: usando EventStoreDB)**: Aumentaria a complexidade e o custo, sem benefício claro para o escopo.
+* A reconstrução do estado através de "replay" de eventos não é necessária, pois cada módulo já possui controle do seu estado atual.
+* O requisito principal da auditoria é garantir o histórico dos eventos registrados, e não gerar estados derivados a partir desses eventos.
+* A abordagem escolhida reduz a complexidade de desenvolvimento e facilita a manutenção do sistema.
+* O uso de banco relacional com tabela de eventos atende às necessidades de armazenamento e consulta dos registros.
+
+## Alternativas analisadas
+
+* **Event Sourcing completo (ex.: EventStoreDB)**: não adotado devido ao aumento de complexidade arquitetural e custos adicionais, sem ganhos relevantes para o cenário atual.
 
 ## Consequências
-- Cada módulo é responsável por sua própria base de estado atual.
-- G09 mantém apenas o log histórico, não o estado agregado.
-- Se no futuro precisarmos de auditoria por agregação, teremos que implementar uma camada de leitura específica.
+
+* Cada módulo continuará responsável pelo gerenciamento do próprio estado operacional.
+* O módulo G09 ficará encarregado apenas do armazenamento do histórico de eventos, sem manter estados agregados.
+* Caso futuramente seja necessária uma auditoria baseada em agregações ou projeções, será necessário implementar uma camada específica de leitura.
+
