@@ -18,14 +18,16 @@ jobs:
           PR_TITLE="${{ github.event.pull_request.title }}"
           echo "Título do PR: $PR_TITLE"
           
-          # Extrai G01..G09 do título
-          GROUP=$(echo "$PR_TITLE" | grep -oP 'G\d{2}' | head -1 | tr '[:upper:]' '[:lower:]')
+          # Extrai grupo no formato G01 ou grupo-01 e normaliza para grupo-01
+          GROUP_NUM=$(echo "$PR_TITLE" | grep -oiP '(?<=\bG)\d{2}|(?<=\bgrupo[- ]?)\d{2}' | head -1)
           
-          if [ -z "$GROUP" ]; then
+          if [ -z "$GROUP_NUM" ]; then
             echo "::warning::Não foi possível detectar o número do grupo no título do PR."
             echo "group_detected=false" >> $GITHUB_OUTPUT
             exit 0
           fi
+
+          GROUP="grupo-${GROUP_NUM}"
           
           echo "Grupo detectado: $GROUP"
           echo "group=$GROUP" >> $GITHUB_OUTPUT
@@ -44,7 +46,7 @@ jobs:
           # Verifica se algum arquivo está fora da pasta do grupo
           VIOLATIONS=""
           while IFS= read -r file; do
-            if [[ "$file" != grupos/*${GROUP}*/* ]] && [[ -n "$file" ]]; then
+            if [[ -n "$file" ]] && [[ "$file" != grupos/${GROUP}-*/* ]]; then
               VIOLATIONS="$VIOLATIONS\n  ⚠️  $file"
             fi
           done <<< "$CHANGED"
@@ -53,7 +55,7 @@ jobs:
             echo "::error::Arquivos modificados FORA da pasta do grupo $GROUP:"
             echo -e "$VIOLATIONS"
             echo ""
-            echo "Cada grupo deve modificar APENAS sua pasta: grupos/*${GROUP}*/"
+            echo "Cada grupo deve modificar APENAS sua pasta: grupos/${GROUP}-*/"
             exit 1
           fi
           
