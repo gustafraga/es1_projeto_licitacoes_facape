@@ -53,6 +53,6 @@ Este grupo pode opcionalmente incluir um arquivo `contexto-agente.md` apenas par
 
 > Preencha esta seção ao finalizar:
 
-- **Integrantes:** Gustavo Moreira Lopes Fraga, Aluno1, Aluno2, Aluno3, Aluno4
+- **Integrantes:** Kelvin Fernandes
 - **Data de entrega:** 03/06/2026
 - **Branch/PR:** feature/grupo-09-auditoria-compliance-bi

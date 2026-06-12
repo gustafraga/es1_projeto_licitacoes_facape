@@ -1,0 +1,43 @@
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-9.0.3, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/kelvinfff/es1_projeto_licitacoes_facape/grupos/grupo-09-auditoria-compliance-bi
+collecting ... collected 35 items
+
+testes.py::test_integridade_do_log PASSED                                [  2%]
+testes.py::test_registro_de_evento_retorna_id PASSED                     [  5%]
+testes.py::test_registro_sem_processo_id PASSED                          [  8%]
+testes.py::test_busca_evento_por_id PASSED                               [ 11%]
+testes.py::test_conformidade_evento_valido PASSED                        [ 14%]
+testes.py::test_conformidade_violacao_fornecedores_insuficientes PASSED  [ 17%]
+testes.py::test_conformidade_violacao_dispensa PASSED                    [ 20%]
+testes.py::test_conformidade_violacao_fracionamento PASSED               [ 22%]
+testes.py::test_conformidade_violacao_adesao PASSED                      [ 25%]
+testes.py::test_gerar_relatorio_conformidade PASSED                      [ 28%]
+testes.py::test_relatorio_conformidade_sem_eventos PASSED                [ 31%]
+testes.py::test_calculo_tempo_medio PASSED                               [ 34%]
+testes.py::test_indicador_sem_processos PASSED                           [ 37%]
+testes.py::test_calcular_taxa_sucesso PASSED                             [ 40%]
+testes.py::test_calcular_taxa_sucesso_sem_processos PASSED               [ 42%]
+testes.py::test_calcular_variacao_preco PASSED                           [ 45%]
+testes.py::test_calcular_variacao_preco_sem_dados PASSED                 [ 48%]
+testes.py::test_indicador_modulo_inexistente PASSED                      [ 51%]
+testes.py::test_alerta_processo_travado PASSED                           [ 54%]
+testes.py::test_alerta_processo_dentro_do_prazo PASSED                   [ 57%]
+testes.py::test_alerta_prazo_excedido PASSED                             [ 60%]
+testes.py::test_alerta_nao_dispara_se_ja_existente PASSED                [ 62%]
+testes.py::test_alerta_resolvido PASSED                                  [ 65%]
+testes.py::test_registro_meta_auditoria PASSED                           [ 68%]
+testes.py::test_meta_auditoria_ip_origem PASSED                          [ 71%]
+testes.py::test_meta_auditoria_filtros PASSED                            [ 74%]
+testes.py::test_acesso_nao_autorizado PASSED                             [ 77%]
+testes.py::test_consulta_com_filtros_compostos PASSED                    [ 80%]
+testes.py::test_integracao_g07_status_pregao PASSED                      [ 82%]
+testes.py::test_integracao_g07_resultado_final PASSED                    [ 85%]
+testes.py::test_integracao_g07_multiplos_status PASSED                   [ 88%]
+testes.py::test_integracao_g08_of_emitida PASSED                         [ 91%]
+testes.py::test_integracao_g08_entrega_confirmada PASSED                 [ 94%]
+testes.py::test_integracao_tempo_resultado_g07_ate_of_g08 PASSED         [ 97%]
+testes.py::test_integracao_eventos_cruzados_g07_g08 PASSED               [100%]
+
+============================== 35 passed in 0.03s ==============================
