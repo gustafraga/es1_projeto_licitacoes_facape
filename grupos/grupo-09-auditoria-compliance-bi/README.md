@@ -53,6 +53,6 @@ Este grupo pode opcionalmente incluir um arquivo `contexto-agente.md` apenas par
 
 > Preencha esta seção ao finalizar:
 
-- **Integrantes:** Kelvin Fernandes
+- **Integrantes:** Kelvin Fernandes, Luis Felipe, Matheus Henrique, Gustavo Fraga, João Pedro Carvalho
 - **Data de entrega:** 03/06/2026
 - **Branch/PR:** feature/grupo-09-auditoria-compliance-bi
