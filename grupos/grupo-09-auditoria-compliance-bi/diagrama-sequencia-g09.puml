@@ -1,0 +1,93 @@
+sequenceDiagram
+    autonumber
+    participant G01_G08 as Módulos G01–G08
+    participant Broker as RabbitMQ / Kafka
+    participant G09_Consumer as G09: Consumer
+    participant G09_Processor as G09: Processador / Jobs
+    participant DB as Base de Dados (Append-Only)
+    participant Auditor as Auditor / Gestor de Compliance
+
+    %% PASSO 1: Publicação do evento
+    Note over G01_G08, Broker: UC-01 – Registrar Evento de Auditoria
+    G01_G08->>Broker: 1. Publica evento (payload, timestamp, usuário, idProcesso)
+    activate Broker
+    Broker-->>G01_G08: 2. Retorna ACK (confirmação de recebimento)
+    deactivate Broker
+
+    %% PASSO 2: Consumo e persistência imutável
+    Note over G09_Consumer, DB: ADR 01 – Imutabilidade / ADR 02 – Mensageria
+    loop A cada evento na fila
+        G09_Consumer->>Broker: 3. Consome evento do barramento
+        activate Broker
+        Broker-->>G09_Consumer: 4. Entrega mensagem
+        deactivate Broker
+        G09_Consumer->>G09_Consumer: 5. Valida integridade (assinatura, formato)
+        G09_Consumer->>DB: 6. Grava como novo registro (Append-Only)
+        activate DB
+        DB-->>G09_Consumer: 7. Confirma persistência (ID do evento gerado)
+        deactivate DB
+    end
+
+    %% PASSO 3: Processamento contínuo (Timer)
+    Note over G09_Processor: UC-04 – Enviar Alertas (Job diário)
+    loop Job diário (ex: 00:00)
+        G09_Processor->>DB: 8. Varre processos não concluídos
+        activate DB
+        DB-->>G09_Processor: 9. Retorna lista de processos + último evento
+        deactivate DB
+
+        alt Processo inativo por X dias
+            G09_Processor->>DB: 10. Instancia Alerta
+            activate DB
+            DB-->>G09_Processor: 11. Alerta criado
+            deactivate DB
+            G09_Processor->>Responsável: 12. Dispara notificação automática
+        end
+    end
+
+    %% PASSO 4: Geração de relatório de conformidade
+    Note over G09_Processor, Auditor: UC-02 – Gerar Relatório de Conformidade
+    Auditor->>G09_Processor: 13. Solicita análise de um processo (ETP)
+    activate G09_Processor
+    G09_Processor->>DB: 14. Recupera logs do processo
+    activate DB
+    DB-->>G09_Processor: 15. Retorna sequência de eventos
+    deactivate DB
+    G09_Processor->>G09_Processor: 16. Executa Motor de Regras (Lei 14.133/2021)
+    alt Não conformidade detectada
+        G09_Processor->>DB: 17. Cria ConformidadeItem com status "Reprovado"
+    else Totalmente conforme
+        G09_Processor->>DB: 18. Cria ConformidadeItem com status "Aprovado" + selo
+    end
+    activate DB
+    DB-->>G09_Processor: 19. Item de conformidade persistido
+    deactivate DB
+    G09_Processor-->>Auditor: 20. Exibe relatório com status e itens
+    deactivate G09_Processor
+
+    %% PASSO 5: Cálculo de indicadores de negócio
+    Note over G09_Processor: UC-03 – Calcular Indicadores (BI)
+    G09_Processor->>DB: 21. Consulta base de LogOperacao para indicadores
+    activate DB
+    DB-->>G09_Processor: 22. Retorna dados de todos os processos
+    deactivate DB
+    G09_Processor->>G09_Processor: 23. Calcula tempo médio, taxa de sucesso, variação de preço
+    G09_Processor->>DB: 24. Persiste/atualiza Indicador
+    activate DB
+    DB-->>G09_Processor: 25. Indicador atualizado
+    deactivate DB
+
+    %% PASSO 6: Meta-auditoria (Backlog US-05)
+    Note over Auditor, DB: US-05 – Meta-auditoria de Acesso
+    Auditor->>G09_Processor: 26. Consulta logs de auditoria (visualizar trilha)
+    activate G09_Processor
+    G09_Processor->>DB: 27. Registra o acesso (idAuditor, data, filtros)
+    activate DB
+    DB-->>G09_Processor: 28. LogOperacao persistido (meta-auditoria)
+    deactivate DB
+    G09_Processor->>DB: 29. Busca logs de eventos solicitados
+    activate DB
+    DB-->>G09_Processor: 30. Retorna eventos
+    deactivate DB
+    G09_Processor-->>Auditor: 31. Exibe trilha imutável
+    deactivate G09_Processor

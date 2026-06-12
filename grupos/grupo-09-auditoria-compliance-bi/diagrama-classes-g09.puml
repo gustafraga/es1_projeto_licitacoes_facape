@@ -1,0 +1,53 @@
+classDiagram
+    class EventoAuditoria {
+        +UUID id
+        +Date dataHora
+        +String idUsuario
+        +String tipoAlteracao
+        +String idModuloOrigem
+        +String idProcesso
+        +String payload
+        +validarIntegridade()
+    }
+
+    class LogOperacao {
+        +UUID id
+        +Date dataHora
+        +String idAuditor
+        +String filtrosPesquisa
+        +registrarAcesso()
+    }
+
+    class ConformidadeItem {
+        +UUID id
+        +String idETP
+        +String status
+        +List~String~ itensVerificados
+        +List~String~ naoConformidades
+        +String seloConformidade
+        +gerarRelatorio()
+    }
+
+    class Indicador {
+        +UUID id
+        +String nome
+        +double valor
+        +Date dataReferencia
+        +String processoAssociado
+        +calcularIndicador()
+    }
+
+    class Alerta {
+        +UUID id
+        +String idProcesso
+        +String idResponsavel
+        +String mensagem
+        +String status
+        +dispararNotificacao()
+    }
+
+    %% Relacionamentos
+    LogOperacao ..> EventoAuditoria : "Meta-auditoria"
+    ConformidadeItem ..> EventoAuditoria : "Baseado em (UC-02)"
+    Indicador ..> EventoAuditoria : "Derivado de (UC-03)"
+    Alerta ..> EventoAuditoria : "Monitora e gera (UC-04)"
