@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+
+  <bpmn:collaboration id="Collaboration_1">
+    <bpmn:participant id="Participant_P1" name="Engine de Auditoria (Automatizado)" processRef="Process_P1"/>
+    <bpmn:participant id="Participant_P2" name="Auditor / Gestor de Compliance" processRef="Process_P2"/>
+    <bpmn:messageFlow id="MessageFlow_1" name="Enviar Relatório" sourceRef="Activity_Enviar" targetRef="Activity_Receber"/>
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_P1" name="Engine de Auditoria (Automatizado)" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_Timer" name="Timer">
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1"/>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_Timer_to_Varrer" sourceRef="StartEvent_Timer" targetRef="Activity_Varrer"/>
+    <bpmn:task id="Activity_Varrer" name="Varrer Fila de Eventos Acumulados"/>
+    <bpmn:sequenceFlow id="Flow_Varrer_to_Motor" sourceRef="Activity_Varrer" targetRef="Activity_Motor"/>
+    <bpmn:task id="Activity_Motor" name="Motor de Regras da Lei 14.133/2021"/>
+    <bpmn:sequenceFlow id="Flow_Motor_to_Decisao" sourceRef="Activity_Motor" targetRef="Gateway_Decisao"/>
+    <bpmn:exclusiveGateway id="Gateway_Decisao" name="Houve Inconformidade Jurídica?"/>
+    <bpmn:sequenceFlow id="Flow_Decisao_Sim" name="Sim" sourceRef="Gateway_Decisao" targetRef="Activity_Alerta">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">sim</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_Decisao_Nao" name="Não" sourceRef="Gateway_Decisao" targetRef="Activity_CalcularKPI">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">nao</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:task id="Activity_Alerta" name="Gerar Alerta Crítico de Compliance e Notificação"/>
+    <bpmn:sequenceFlow id="Flow_Alerta_to_CalcularKPI" sourceRef="Activity_Alerta" targetRef="Activity_CalcularKPI"/>
+    <bpmn:task id="Activity_CalcularKPI" name="Calcular Indicadores (KPIs)"/>
+    <bpmn:sequenceFlow id="Flow_CalcularKPI_to_Compilar" sourceRef="Activity_CalcularKPI" targetRef="Activity_Compilar"/>
+    <bpmn:task id="Activity_Compilar" name="Compilar Relatório Periódico"/>
+    <bpmn:sequenceFlow id="Flow_Compilar_to_Enviar" sourceRef="Activity_Compilar" targetRef="Activity_Enviar"/>
+    <bpmn:sendTask id="Activity_Enviar" name="Enviar Relatório ao Auditor" messageRef="Message_Relatorio"/>
+    <bpmn:sequenceFlow id="Flow_Enviar_to_End" sourceRef="Activity_Enviar" targetRef="EndEvent_P1"/>
+    <bpmn:endEvent id="EndEvent_P1"/>
+  </bpmn:process>
+
+  <bpmn:process id="Process_P2" name="Auditor / Gestor de Compliance" isExecutable="false">
+    <bpmn:startEvent id="StartEvent_P2"/>
+    <bpmn:sequenceFlow id="Flow_Start_to_Receber" sourceRef="StartEvent_P2" targetRef="Activity_Receber"/>
+    <bpmn:receiveTask id="Activity_Receber" name="Receber Relatório" messageRef="Message_Relatorio"/>
+    <bpmn:sequenceFlow id="Flow_Receber_to_Analisar" sourceRef="Activity_Receber" targetRef="Activity_Analisar"/>
+    <bpmn:task id="Activity_Analisar" name="Analisar Relatório e Logs"/>
+    <bpmn:sequenceFlow id="Flow_Analisar_to_Homologar" sourceRef="Activity_Analisar" targetRef="Activity_Homologar"/>
+    <bpmn:task id="Activity_Homologar" name="Homologar Parecer de Conformidade"/>
+    <bpmn:sequenceFlow id="Flow_Homologar_to_Fim" sourceRef="Activity_Homologar" targetRef="EndEvent_P2"/>
+    <bpmn:endEvent id="EndEvent_P2" name="Fim"/>
+  </bpmn:process>
+
+  <bpmn:message id="Message_Relatorio" name="Relatório de Auditoria"/>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1">
+      <bpmndi:BPMNShape id="Participant_P1_di" bpmnElement="Participant_P1" isHorizontal="true">
+        <dc:Bounds x="50" y="50" width="1020" height="320"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_Timer_di" bpmnElement="StartEvent_Timer">
+        <dc:Bounds x="70" y="140" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Varrer_di" bpmnElement="Activity_Varrer">
+        <dc:Bounds x="140" y="120" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Motor_di" bpmnElement="Activity_Motor">
+        <dc:Bounds x="310" y="120" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Decisao_di" bpmnElement="Gateway_Decisao">
+        <dc:Bounds x="480" y="135" width="50" height="50"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Alerta_di" bpmnElement="Activity_Alerta">
+        <dc:Bounds x="580" y="60" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_CalcularKPI_di" bpmnElement="Activity_CalcularKPI">
+        <dc:Bounds x="580" y="220" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Compilar_di" bpmnElement="Activity_Compilar">
+        <dc:Bounds x="760" y="120" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_Enviar_di" bpmnElement="Activity_Enviar">
+        <dc:Bounds x="930" y="120" width="120" height="80"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="EndEvent_P1_di" bpmnElement="EndEvent_P1">
+        <dc:Bounds x="1100" y="140" width="36" height="36"/>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Participant_P2_di" bpmnElement="Participant_P2" isHorizontal="true">
+        <dc:Bounds x="50" y="420" width="1020" height="280"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_P2
